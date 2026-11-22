@@ -1,0 +1,56 @@
+<!doctype html><meta charset=utf-8><title>__TITLE__</title>
+<!-- Full-screen scenes (/starting, /brb, /ending) in a loading-screen style (GTA-inspired default theme): cinematic art of the streamer
+     (state/overlay/scene_<mode>.png from kit.scene_art), slow camera drift, letterbox, grain, Pricedown title. -->
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@600;800&display=swap" rel=stylesheet>
+<link rel=stylesheet href=/common.css>
+<style>
+@font-face{font-family:Pricedown;src:url(/pricedown.otf)}
+body{background:radial-gradient(ellipse at 70% 110%,#FF9628 0,#FF37A0 28%,#2D0A64 70%)}
+#art{position:absolute;inset:0;background-size:cover;background-position:center top;transform-origin:60% 0;animation:drift 48s ease-in-out infinite alternate}
+/* zoom anchored to the top edge and pan only sideways, so his head and hair are never cropped */
+@keyframes drift{from{transform:scale(1) translateX(0)}to{transform:scale(1.06) translateX(-1.5%)}}
+#shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,4,48,.88) 0,rgba(20,4,48,.55) 34%,rgba(20,4,48,0) 58%),
+ radial-gradient(ellipse at 60% 50%,transparent 55%,rgba(0,0,0,.55) 100%)}
+#grain{position:absolute;inset:-50%;opacity:.09;mix-blend-mode:overlay;animation:grain .6s steps(4) infinite;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}}
+.bar{position:absolute;left:0;right:0;height:72px;background:#000;z-index:3}#top{top:0;animation:bt 1.4s cubic-bezier(.2,.8,.2,1) both}#bot{bottom:0;animation:bb 1.4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes bt{from{transform:translateY(-100%)}}@keyframes bb{from{transform:translateY(100%)}}
+#txt{position:absolute;left:120px;top:250px;width:860px;z-index:2}
+#kick{font:800 26px Inter,sans-serif;letter-spacing:.45em;color:#FFD666;text-transform:uppercase;animation:up 1s .5s both}
+h1{margin:6px 0 0;font:400 168px/0.92 Pricedown,Anton,sans-serif;color:#fff;-webkit-text-stroke:8px #000;paint-order:stroke fill;
+ text-shadow:9px 9px 0 #000;animation:up 1.1s .7s both}
+h1 em{font-style:normal;background:linear-gradient(180deg,#FFD666,#FF7096 55%,#B248E6);-webkit-background-clip:text;background-clip:text;color:transparent}
+#sub{margin-top:26px;display:inline-flex;align-items:center;gap:18px;font:400 64px Pricedown,Anton,sans-serif;-webkit-text-stroke:5px #000;paint-order:stroke fill;
+ text-shadow:5px 5px 0 #000;animation:up 1s 1s both}
+#sub:empty{display:none}
+@keyframes up{from{opacity:0;transform:translateY(40px)}}
+#tip{position:absolute;left:120px;bottom:18px;height:60px;display:flex;align-items:center;gap:14px;z-index:4;font:600 24px Inter,sans-serif;color:#ddd}
+#tip b{color:#FF37A0;letter-spacing:.2em;font-weight:800}#tipt{transition:opacity .5s}
+#spin{position:absolute;right:120px;bottom:28px;width:40px;height:40px;z-index:4;border-radius:50%;border:5px solid rgba(255,255,255,.18);border-top-color:#FF37A0;animation:sp 1.1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#tag{position:absolute;right:120px;top:30px;z-index:4;font:800 22px Inter,sans-serif;letter-spacing:.35em;color:#fff;opacity:.85}
+#chat{left:120px;bottom:130px;top:auto;height:300px;width:520px;background:rgba(20,4,48,.6)}
+</style>
+<div id=art></div><div id=shade></div><div id=grain></div>
+<div id=top class=bar></div><div id=bot class=bar></div>
+<div id=tag>__NAME__ · __GAME__</div>
+<div id=txt><div id=kick></div><h1 id=h></h1><div id=sub></div></div>
+<div id=chat style="display:none"></div>
+<div id=tip><b>TIP</b><span id=tipt></span></div><div id=spin></div>
+<script id=d type=application/json>__DATA__</script><script src=/common.js></script><script>
+const words = '__TITLE__'.split(' '), last = words.pop();
+h.append(document.createTextNode(words.join(' ') + (words.length ? ' ' : '')));
+const em = document.createElement('em'); em.textContent = last; h.append(em);
+const img = new Image(); img.onload = () => art.style.backgroundImage = `url(${img.src})`; img.src = `/scene_${D.mode}.png`;
+kick.textContent = {starting: D.kicker || 'Tonight on stream', brb: 'Grabbing supplies', ending: 'Until next time'}[D.mode] || '';
+const tips = D.ticker.length ? D.ticker : D.links.map(l => l.n + ': ' + l.u); let ti = 0;
+const nextTip = () => { tipt.style.opacity = 0; setTimeout(() => { tipt.textContent = tips[ti++ % tips.length]; tipt.style.opacity = 1 }, 500) };
+nextTip(); setInterval(nextTip, 7000);
+if (D.mode == 'starting') {
+ const end = Date.now() + 60000 * (parseFloat(new URLSearchParams(location.search).get('min')) || 5);
+ const t = () => { const s = Math.max(0, Math.ceil((end - Date.now()) / 1000)); sub.textContent = s ? 'Live in ' + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0') : "Here we go"; };
+ t(); setInterval(t, 500);
+} else if (D.mode == 'brb') { chat.style.display = 'flex'; startChat(chat) }
+else if (D.schedule) sub.textContent = 'Next: ' + D.schedule;
+</script>

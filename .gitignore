@@ -1,0 +1,19 @@
+.env
+secrets/
+buffer/
+clips/
+state/
+.venv/
+models/
+.selftest/
+__pycache__/
+mediamtx.yml
+# Typodermic desktop EULA: no redistribution
+kit/third_party/pricedown/*.otf
+# downloaded per-game fonts: licences often forbid redistribution
+kit/third_party/fonts/
+.DS_Store
+*.log
+*.pyc
+voice/
+kit/third_party/pricedown/*.pdf

@@ -1,0 +1,25 @@
+<!doctype html><meta charset=utf-8><title>layout</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@600;800&display=swap" rel=stylesheet>
+<link rel=stylesheet href=/common.css>
+<style>
+/* FACECAM (green-screen cut-out, chroma key in OBS, NO frame drawn here): place the webcam source at
+   x=1408 y=778 w=480 h=270 (right 32px / bottom 32px). The name plate overlaps its bottom edge. */
+#plate{position:absolute;right:32px;bottom:32px;width:480px;box-sizing:border-box;padding:8px 14px;text-align:center;border-radius:14px;
+ background:rgba(45,10,100,.15);box-shadow:0 6px 24px rgba(0,0,0,.45)}
+#plate .a{font-size:40px;line-height:1.05;-webkit-text-stroke:5px #000;paint-order:stroke fill;text-shadow:3px 3px 0 #FF37A0}
+#plate .r{display:flex;justify-content:center;align-items:center;gap:10px;font-size:20px}#plate .ic{width:26px;height:26px}
+#tk{position:absolute;left:484px;right:640px;bottom:32px;height:44px;line-height:44px;text-align:center;font-size:22px;border-radius:99px;
+ background:rgba(45,10,100,.15);overflow:hidden;white-space:nowrap;text-shadow:0 1px 3px #000;transition:opacity .4s}
+#qr{position:absolute;right:528px;bottom:32px;width:96px;height:96px;border-radius:8px;display:none}
+</style>
+<div id=chat></div><div id=tk></div><img id=qr src=/tip_qr.png alt="">
+<div id=plate><div class=a>__NAME__</div><div class=r id=pi></div></div>
+<script id=d type=application/json>__DATA__</script><script src=/common.js></script><script>
+for (const k of ['youtube','twitch','tiktok','instagram','discord']) pi.append(icon(k));
+pi.append(span('', D.handle));
+if (D.qr) qr.style.display = 'block';
+let i = 0; const T = D.ticker;
+function show(t) { tk.style.opacity = 0; setTimeout(() => { tk.textContent = t; tk.style.opacity = 1 }, 400) }
+if (T.length) { tk.textContent = T[0]; setInterval(() => show(T[++i % T.length]), 12000) }
+startChat(chat, show);
+</script>

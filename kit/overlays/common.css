@@ -1,0 +1,12 @@
+/* GTA VI palette: #2D0A64 #FF37A0 #FF9628, gradient #FFD666 #FF7096 #B248E6, white text, black outline */
+:root{--g:linear-gradient(135deg,#FFD666,#FF7096,#B248E6)}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:transparent;color:#fff;font-family:Inter,sans-serif;font-weight:700}
+.a{font-family:Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.02em}
+.ic{display:inline-flex;width:28px;height:28px;vertical-align:middle}.ic svg{width:100%;height:100%}
+#chat{position:absolute;left:32px;bottom:32px;width:420px;height:360px;box-sizing:border-box;padding:12px;display:flex;flex-direction:column;
+ justify-content:flex-end;gap:6px;overflow:hidden;background:rgba(45,10,100,.08);border-radius:18px;font-size:19px;line-height:1.25}
+.l{word-break:break-word;text-shadow:0 1px 3px #000;animation:in .3s both}.l .ic{width:20px;height:20px;margin-right:6px;vertical-align:-3px}
+.l .n{font-weight:800;color:#FFD666;margin-right:8px}.l.bot .n{color:#FF37A0}
+.l.paid{background:linear-gradient(90deg,#FF9628,#FF37A0);border-radius:10px;padding:6px 10px;color:#fff}.l.paid .n{color:#fff}
+.pill{background:#FF37A0;color:#fff;border-radius:99px;padding:1px 8px;font-size:13px;margin-right:6px;font-family:Anton,sans-serif;letter-spacing:.05em}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
